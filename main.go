@@ -25,8 +25,9 @@ func main() {
 	r.GET("/login", controller.Login)
 
 	godotenv.Load()
+	ip := os.Getenv("IP")
 	port := os.Getenv("PORT")
-	address := fmt.Sprintf("%s:%s", "0.0.0.0", port)
+	address := fmt.Sprintf("%s:%s", ip, port)
 	fmt.Println(address)
 
 	r.Run(address)
