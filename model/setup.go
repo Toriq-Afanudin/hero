@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 // const (
@@ -17,14 +17,14 @@ import (
 // )
 
 func SetupModels() *gorm.DB {
-	godotenv.Load()
+	// godotenv.Load()
 	user := os.Getenv("USER")
 	password := os.Getenv("PASSWORD")
 	host := os.Getenv("SERVER")
 	schema := os.Getenv("SCHEMA")
 	database := os.Getenv("DATABASE")
 	port := os.Getenv("PORT")
-	var connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowNativePasswords=true", user, password, host, port, schema)
+	var connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowNativePasswords=true/sslmode=require", user, password, host, port, schema)
 	var rdbms = fmt.Sprintf("%s", database)
 	db, err := gorm.Open(rdbms, connectionString)
 	if err != nil {
