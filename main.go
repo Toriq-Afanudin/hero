@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	// "fmt"
+	// "os"
 
 	// "database/sql"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 
 	"heroku.com/controller"
 	"heroku.com/model"
@@ -24,12 +24,12 @@ func main() {
 	r.GET("/user", controller.GetUser)
 	r.GET("/login", controller.Login)
 
-	godotenv.Load()
-	port := os.Getenv("PORT")
-	address := fmt.Sprintf("%s:%s", "0.0.0.0", port)
-	fmt.Println(address)
+	// godotenv.Load()
+	// port := os.Getenv("PORT")
+	// address := fmt.Sprintf("%s:%s", "0.0.0.0", port)
+	// fmt.Println(address)
 
-	r.Run(address)
+	// r.Run(address)
 
-	// r.Run()
+	r.Run()
 }
