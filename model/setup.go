@@ -6,10 +6,10 @@ import (
 )
 
 func SetupModels() *gorm.DB {
-	db, err := gorm.Open("mysql", "toriq:Ayu!1999@(toriq1999.mysql.database.azure.com:3306)/capstone?charset=utf8mb4&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "alterra:Udin@123@(hero2000.mysql.database.azure.com:3306)/capstone?charset=utf8mb4&parseTime=True&loc=Local")
 	if err != nil {
 		panic("gagal koneksi database")
 	}
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Pasien{}, &Jadwal{}, &Dokter{}, &Rekam_medis{}, &Obat{}, &Ruangan{}, &Perawat{}, &User{})
 	return db
 }
