@@ -22,7 +22,7 @@ func SetupModels() *gorm.DB {
 	password := os.Getenv("PASSWORD")
 	host := os.Getenv("SERVER")
 	schema := os.Getenv("SCHEMA")
-	var connectionString = fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, schema)
+	var connectionString = fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, schema)
 	db, err := gorm.Open("mysql", connectionString)
 	if err != nil {
 		panic("gagal koneksi database")
