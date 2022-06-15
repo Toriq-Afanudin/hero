@@ -1,9 +1,9 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"os"
+	// "log"
+	// "net/http"
+	// "os"
 
 	// "database/sql"
 
@@ -27,12 +27,12 @@ func main() {
 
 	// godotenv.Load()
 	// ip := os.Getenv("IP")
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
+	// port := os.Getenv("PORT")
+	// if port == "" {
+	// 	port = "8000"
+	// }
 
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	// log.Fatal(http.ListenAndServe(":"+port, r))
 	// address := fmt.Sprintf("%s:%s", ip, port)
 	// fmt.Println(address)
 
