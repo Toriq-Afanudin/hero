@@ -8,8 +8,13 @@ import (
 )
 
 func SetupModels() *gorm.DB {
+	database := os.Getenv("DATABASE")
+	user := os.Getenv("USER")
+	password := os.Getenv("PASSWORD")
+	server := os.Getenv("SERVER")
+	schema := os.Getenv("SCHEMA")
 	port := os.Getenv("PORT2")
-	db, err := gorm.Open("mysql", "alterra:Udin@123@(hero2000.mysql.database.azure.com:%s)/capstone?charset=utf8mb4&parseTime=True&loc=Local", port)
+	db, err := gorm.Open("%s", "%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", database, user, password, server, port, schema)
 	if err != nil {
 		panic("gagal koneksi database")
 	}
