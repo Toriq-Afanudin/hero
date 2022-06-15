@@ -26,7 +26,7 @@ func main() {
 
 	godotenv.Load()
 	ip := os.Getenv("IP")
-	port := os.Getenv("PORT")
+	port := os.Getenv("PORT2")
 	address := fmt.Sprintf("%s:%s", ip, port)
 	fmt.Println(address)
 
