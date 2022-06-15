@@ -1,12 +1,15 @@
 package model
 
 import (
+	"os"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func SetupModels() *gorm.DB {
-	db, err := gorm.Open("mysql", "alterra:Udin@123@(hero2000.mysql.database.azure.com:3306)/capstone?charset=utf8mb4&parseTime=True&loc=Local")
+	port := os.Getenv("PORT2")
+	db, err := gorm.Open("mysql", "alterra:Udin@123@(hero2000.mysql.database.azure.com:%s)/capstone?charset=utf8mb4&parseTime=True&loc=Local", port)
 	if err != nil {
 		panic("gagal koneksi database")
 	}
