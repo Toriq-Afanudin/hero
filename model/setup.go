@@ -23,7 +23,7 @@ func SetupModels() *gorm.DB {
 	host := os.Getenv("SERVER")
 	schema := os.Getenv("SCHEMA")
 	database := os.Getenv("DATABASE")
-	port := os.Getenv("PORT-2")
+	port := os.Getenv("PORT")
 	var connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowNativePasswords=true", user, password, host, port, schema)
 	var rdbms = fmt.Sprintf("%s", database)
 	db, err := gorm.Open(rdbms, connectionString)
