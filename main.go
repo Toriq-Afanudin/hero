@@ -8,16 +8,16 @@ import (
 	"github.com/joho/godotenv"
 
 	"heroku.com/controller"
-	// "heroku.com/model"
+	"heroku.com/model"
 )
 
 func main() {
 	r := gin.Default()
-	// db := model.SetupModels()
-	// r.Use(func(c *gin.Context) {
-	// 	c.Set("db", db)
-	// 	c.Next()
-	// })
+	db := model.SetupModels()
+	r.Use(func(c *gin.Context) {
+		c.Set("db", db)
+		c.Next()
+	})
 	r.GET("/user", controller.GetUser)
 	r.GET("/", controller.Utama)
 	r.GET("/login", controller.Login)
