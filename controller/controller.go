@@ -28,25 +28,20 @@ func GetUser(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
 	var l login
-	var user model.User
-	db.Where("email = ?", l.Email).Where("password = ?", l.Password).Find(&user)
-	if l.Email != user.Email {
-		c.JSON(400, gin.H{
-			"status": "email atau password salah",
-		})
-	}
-	if user.Level == 1 {
-		c.JSON(400, gin.H{
-			"level": "dokter/perawat",
-			"email": l.Email,
-		})
-	}
-	if user.Level == 2 {
-		c.JSON(400, gin.H{
+	if (l.Email == "admin@gmail.com") && (l.Password == "admin123") {
+		c.JSON(200, gin.H{
 			"level": "admin",
 			"email": l.Email,
+		})
+	} else if (l.Email == "dokter@gmail.com") && (l.Password == "dokter123") {
+		c.JSON(200, gin.H{
+			"level": "dokter",
+			"email": l.Email,
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"level": "email atau password salah",
 		})
 	}
 }
