@@ -13,11 +13,8 @@ type login struct {
 }
 
 func Utama(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-	var user []model.User
-	db.Where("id = ?", 1).Find(&user)
 	c.JSON(200, gin.H{
-		"data": user,
+		"data": "selamat datang di aplikasi hospital",
 	})
 }
 

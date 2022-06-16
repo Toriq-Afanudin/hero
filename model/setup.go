@@ -9,13 +9,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// const (
-// 	host     = "hero2000.mysql.database.azure.com"
-// 	database = "capstone"
-// 	user     = "alterra"
-// 	password = "Udin@123"
-// )
-
 func SetupModels() *gorm.DB {
 	godotenv.Load()
 	user := os.Getenv("USER")
