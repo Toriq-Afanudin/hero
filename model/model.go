@@ -2,8 +2,8 @@ package model
 
 type Pasien struct {
 	Id            int    `json:"id"`
-	Nama          string `json:"nama"`
 	Nik           string `json:"nik"`
+	Nama          string `json:"nama"`
 	Alamat        string `json:"alamat"`
 	Jenis_kelamin string `json:"jenis_kelamin"`
 	No_hp         string `json:"no_hp"`

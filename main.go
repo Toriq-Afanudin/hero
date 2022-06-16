@@ -22,6 +22,8 @@ func main() {
 
 	r.GET("/", controller.Utama)
 	r.POST("/tambah_akun", controller.TambahAkun)
+	r.GET("/login", controller.Login)
+	r.GET("/data_pasien", controller.DataPasien)
 
 	godotenv.Load()
 	port := os.Getenv("PORT")
