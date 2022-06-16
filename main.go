@@ -24,10 +24,8 @@ func main() {
 	r.POST("/tambah_akun", controller.TambahAkun)
 
 	godotenv.Load()
-	ip := os.Getenv("IP")
 	port := os.Getenv("PORT")
-	address := fmt.Sprintf("%s:%s", ip, port)
-	fmt.Println(address)
+	var dns = fmt.Sprintf("0.0.0.0:%s", port)
 
-	r.Run(address)
+	r.Run(dns)
 }
