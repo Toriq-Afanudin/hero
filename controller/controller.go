@@ -41,7 +41,7 @@ func Login(c *gin.Context) {
 		})
 	} else {
 		c.JSON(400, gin.H{
-			"level": "email atau password salah",
+			"status": "email atau password salah",
 		})
 	}
 }
