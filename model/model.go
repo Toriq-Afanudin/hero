@@ -22,12 +22,12 @@ type Jadwal struct {
 }
 
 type Dokter struct {
-	Nik           string `json:"nik"`
 	Id_user       int    `json:"id_user"`
+	Sip           string `json:"sip"`
 	Nama_dokter   string `json:"nama_dokter"`
 	Jenis_kelamin string `json:"jenis_kelamin"`
+	Nik           string `json:"nik"`
 	Alamat        string `json:"alamat"`
-	Sip           string `json:"sip"`
 	Spesialis     string `json:"spesialis"`
 }
 
@@ -67,7 +67,8 @@ type Perawat struct {
 
 type User struct {
 	Id       int    `json:"id"`
+	Nickname string `json:"nickname"`
 	Email    string `json:"email"`
-	Level    int    `json:"level"`
 	Password string `json:"password"`
+	Level    string `json:"level"`
 }
