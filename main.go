@@ -141,13 +141,13 @@ func main() {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
 
+	r.GET("/", controller.Utama)
 	auth := r.Group("/auth")
 	// Refresh time can be longer than token timeout
 	auth.GET("/refresh_token", authMiddleware.RefreshHandler)
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
 		auth.GET("/hello", helloHandler)
-		auth.GET("/", controller.Utama)
 		auth.POST("/tambah_akun", controller.TambahAkun)
 
 		//DATA PASIEN
