@@ -7,27 +7,27 @@ import (
 )
 
 type login struct {
-	Email    string `form:"email"`
-	Password string `form:"password"`
+	Email    string `form:"email" json:"email"`
+	Password string `form:"password" json:"password"`
 }
 
 func Login(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var l login
-	if err := c.ShouldBindJSON(&l); err != nil {
+	var login login
+	if err := c.ShouldBindJSON(&login); err != nil {
 		c.JSON(400, gin.H{
 			"status":  "error",
 			"message": "input tidak dalam bentuk json",
 		})
 		return
 	}
-	var u model.User
-	db.Where("email = ?", l.Email).Where("password = ?", l.Password).Find(&u)
-	if l.Email == u.Email {
+	var user model.User
+	db.Where("email = ?", login.Email).Where("password = ?", login.Password).Find(&user)
+	if login.Email == user.Email {
 		c.JSON(200, gin.H{
 			"status": "login berhasil",
-			"email":  u.Email,
-			"level":  u.Level,
+			"email":  user.Email,
+			"level":  user.Level,
 		})
 	} else {
 		c.JSON(200, gin.H{
