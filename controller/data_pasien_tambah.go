@@ -50,6 +50,7 @@ func Tambah_data_pasien(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"status": "gagal menambahkan, tidak boleh ada data yang kosong",
 		})
+		return
 	}
 	if (t.Jenis_kelamin == "P") || (t.Jenis_kelamin == "L") {
 		db.Create(&add)
