@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type Pasien struct {
 	Id            int    `json:"id"`
 	Nik           string `json:"nik"`
@@ -32,8 +34,8 @@ type Dokter struct {
 }
 
 type Rekam_medis struct {
-	Id          int    `json:"id"`
-	Tanggal     string `json:"tanggal"`
+	Id          int `json:"id"`
+	Tanggal     time.Time
 	Keluhan     string `json:"keluhan"`
 	Pemeriksaan string `json:"pemeriksaan"`
 	Kode_obat   string `json:"kode_obat"`
