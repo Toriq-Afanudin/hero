@@ -17,10 +17,18 @@ type pasien struct {
 	No_hp          string `form:"no_hp"`
 	Tempat_lahir   string `form:"tempat_lahir"`
 	Tanggal_lahir  string `form:"tanggal_lahir"`
+	Rekam_medis    interface{}
 }
 
 type penyakit struct {
 	Pemeriksaan string `form:"pemeriksaan"`
+}
+
+type rekam_medis struct {
+	Tanggal     string `json:"tanggal"`
+	Keluhan     string `json:"keluhan"`
+	Pemeriksaan string `json:"pemeriksaan"`
+	Kode_obat   string `json:"kode_obat"`
 }
 
 func DataPasien(c *gin.Context) {
@@ -38,9 +46,12 @@ func DataPasien(c *gin.Context) {
 	var d []pasien
 	db.Raw("SELECT * FROM capstone.pasiens;").Scan(&d)
 	var p penyakit
+	var rkm_medis []rekam_medis
 	for i := 0; i < len(d); i++ {
 		db.Raw("SELECT pemeriksaan FROM capstone.rekam_medis WHERE id=?", d[i].Id).Scan(&p)
 		db.Model(&d[i]).Update("Jenis_penyakit", p.Pemeriksaan)
+		db.Raw("SELECT tanggal, keluhan, pemeriksaan, kode_obat FROM capstone.rekam_medis WHERE id_pasien=?", d[i].Id).Scan(&rkm_medis)
+		db.Model(&d[i]).Update("Rekam_medis", rkm_medis)
 	}
 	c.JSON(200, gin.H{
 		"status": "Berhasil",

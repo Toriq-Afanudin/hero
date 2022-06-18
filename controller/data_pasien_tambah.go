@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"time"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -46,6 +48,7 @@ func Tambah_data_pasien(c *gin.Context) {
 		Tempat_lahir:  t.Tempat_lahir,
 		Tanggal_lahir: t.Tanggal_lahir,
 	}
+
 	if (t.Nik == "") || (t.Nama == "") || (t.Alamat == "") || (t.Jenis_kelamin == "") || (t.Nomer_telfon == "") || (t.Tempat_lahir == "") || (t.Tanggal_lahir == "") {
 		c.JSON(400, gin.H{
 			"status":  "Error",
@@ -56,10 +59,18 @@ func Tambah_data_pasien(c *gin.Context) {
 	if (t.Jenis_kelamin == "P") || (t.Jenis_kelamin == "L") {
 		db.Create(&add)
 		c.JSON(200, gin.H{
-			"status": "Berhasil",
-			"data":   add,
-			"user":   claims["id"],
+			"status":  "Berhasil",
+			"data":    add,
+			"user":    claims["id"],
+			"message": "Lengkapi data rekam medis.",
 		})
+		var psn model.Pasien
+		db.Where("nama = ?", t.Nama).Find(&psn)
+		add2 := model.Rekam_medis{
+			Tanggal:   time.Now(),
+			Id_pasien: psn.Id,
+		}
+		db.Create(&add2)
 	} else {
 		c.JSON(400, gin.H{
 			"status":  "Error",
