@@ -83,11 +83,29 @@ func TambahAkun(c *gin.Context) {
 	}
 	if pekerjaan {
 		db.Create(&create)
+		var mod model.User
+		db.Where("nickname = ?", tambah.Nickname).Find(&mod)
+		var message string
+		if tambah.Level == "dokter" {
+			new := model.Dokter{
+				Id_user: mod.Id,
+			}
+			db.Create(&new)
+			message = "berhasil menambahkan dokter baru, dengan akun " + tambah.Nickname + ", silakan untuk melengkapi data dokter"
+		}
+		if tambah.Level == "perawat" {
+			new := model.Perawat{
+				Id_user: mod.Id,
+			}
+			db.Create(&new)
+			message = "berhasil menambahkan perawat baru, dengan akun " + tambah.Nickname + ", silakan untuk melengkapi data perawat"
+		}
 		c.JSON(200, gin.H{
 			"status":   "akun berhasil di tambahkan",
 			"nickname": tambah.Nickname,
 			"email":    tambah.Email,
 			"userID":   claims["id"],
+			"message":  message,
 		})
 	}
 }
