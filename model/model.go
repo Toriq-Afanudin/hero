@@ -57,7 +57,7 @@ type Ruangan struct {
 }
 
 type Perawat struct {
-	Id_user       string `json:"id_user"`
+	Id_user       int    `json:"id_user"`
 	Sip           string `json:"sip"`
 	Nama_perawat  string `json:"nama_perawat"`
 	Jenis_kelamin string `json:"jenis_kelamin"`
