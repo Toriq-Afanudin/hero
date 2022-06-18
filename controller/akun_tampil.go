@@ -24,8 +24,8 @@ func Akun_tampil(c *gin.Context) {
 	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&use)
 	if claims["id"] == use.Email {
 		c.JSON(400, gin.H{
-			"status":  "gagal menampilkan data",
-			"message": "yang berhak mengakses halaman ini hanya dokter atau perawat",
+			"status":  "Error",
+			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
 		})
 		return
 	}
@@ -48,8 +48,8 @@ func Akun_tampil(c *gin.Context) {
 		}
 	}
 	c.JSON(200, gin.H{
-		"status": "berhasil menampilkan data user",
+		"status": "Berhasil",
 		"data":   akun,
-		"userID": claims["id"],
+		"user":   claims["id"],
 	})
 }

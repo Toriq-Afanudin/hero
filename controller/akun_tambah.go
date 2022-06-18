@@ -21,23 +21,23 @@ func TambahAkun(c *gin.Context) {
 	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&use)
 	if claims["id"] == use.Email {
 		c.JSON(400, gin.H{
-			"status":  "gagal menampilkan data",
-			"message": "yang berhak mengakses halaman ini hanya dokter atau perawat",
+			"status":  "Error",
+			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
 		})
 		return
 	}
 	var tambah User
 	if err := c.ShouldBindJSON(&tambah); err != nil {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "input tidak dalam bentuk json",
+			"status":  "Error",
+			"message": "Request harus dalam bentuk JSON.",
 		})
 		return
 	}
 	if (tambah.Nickname == "") || (tambah.Email == "") || (tambah.Password == "") || (tambah.Level == "") {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "ada data yang belum di isi",
+			"status":  "Error",
+			"message": "Data tidak boleh ada yang kosong.",
 		})
 		return
 	}
@@ -45,23 +45,23 @@ func TambahAkun(c *gin.Context) {
 	db.Where("nickname = ?", tambah.Nickname).Find(&user)
 	if user.Nickname == tambah.Nickname {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "nickname sudah digunakan",
+			"status":  "Error",
+			"message": "Nickname sudah digunakan.",
 		})
 		return
 	}
 	db.Where("email = ?", tambah.Email).Find(&user)
 	if user.Email == tambah.Email {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "email sudah digunakan",
+			"status":  "Error",
+			"message": "Email sudah digunakan.",
 		})
 		return
 	}
 	if len(tambah.Password) < 8 {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "password minimal 8 karakter",
+			"status":  "Error",
+			"message": "Password minimal terdiri dari 8 karakter.",
 		})
 		return
 	}
@@ -70,8 +70,8 @@ func TambahAkun(c *gin.Context) {
 		pekerjaan = true
 	} else {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "jenis pekerjaan harus di isi dengan perawat atau dokter atau admin",
+			"status":  "Error",
+			"message": "Pilih jenis pekerjaan sebagai admin, dokter, atau perawat.",
 		})
 		return
 	}
@@ -91,21 +91,20 @@ func TambahAkun(c *gin.Context) {
 				Id_user: mod.Id,
 			}
 			db.Create(&new)
-			message = "berhasil menambahkan dokter baru, dengan akun " + tambah.Nickname + ", silakan untuk melengkapi data dokter"
+			message = "Lengkapi data dokter " + tambah.Nickname
 		}
 		if tambah.Level == "perawat" {
 			new := model.Perawat{
 				Id_user: mod.Id,
 			}
 			db.Create(&new)
-			message = "berhasil menambahkan perawat baru, dengan akun " + tambah.Nickname + ", silakan untuk melengkapi data perawat"
+			message = "Lengkapi data perawat " + tambah.Nickname
 		}
 		c.JSON(200, gin.H{
-			"status":   "akun berhasil di tambahkan",
-			"nickname": tambah.Nickname,
-			"email":    tambah.Email,
-			"userID":   claims["id"],
-			"message":  message,
+			"status":  "Berhasil",
+			"data":    tambah.Nickname,
+			"user":    claims["id"],
+			"message": message,
 		})
 	}
 }
