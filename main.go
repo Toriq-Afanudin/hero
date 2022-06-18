@@ -148,7 +148,6 @@ func main() {
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
 		auth.GET("/hello", helloHandler)
-		auth.POST("/tambah_akun", controller.TambahAkun)
 
 		//DATA PASIEN
 		auth.GET("/data_pasien", controller.DataPasien)
@@ -156,12 +155,14 @@ func main() {
 		auth.PUT("/edit_data_pasien/:id", controller.Edit_data_pasien)
 		auth.DELETE("hapus_data_pasien/:id", controller.Hapus_data_pasien)
 
-		auth.GET("/akun_user", controller.List_account)
+		//MANAGE ACCOUNT
+		auth.GET("/akun_tampil", controller.Akun_tampil)
+		auth.POST("/akun_tambah", controller.TambahAkun)
 	}
 
 	godotenv.Load()
 	port := os.Getenv("PORT")
-	var dns = fmt.Sprintf("0.0.0.0:%s", port)
+	var dns = fmt.Sprintf("127.0.0.1:%s", port)
 
 	r.Run(dns)
 }
