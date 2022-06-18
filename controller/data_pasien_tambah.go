@@ -24,16 +24,16 @@ func Tambah_data_pasien(c *gin.Context) {
 	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&user)
 	if claims["id"] == user.Email {
 		c.JSON(400, gin.H{
-			"status":  "gagal menampilkan data",
-			"message": "yang berhak mengakses halaman ini hanya dokter atau perawat",
+			"status":  "Error",
+			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
 		})
 		return
 	}
 	var t tambah_data
 	if err := c.ShouldBindJSON(&t); err != nil {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "input tidak dalam bentuk json",
+			"status":  "Error",
+			"message": "Request harus dalam bentuk JSON.",
 		})
 		return
 	}
@@ -48,20 +48,22 @@ func Tambah_data_pasien(c *gin.Context) {
 	}
 	if (t.Nik == "") || (t.Nama == "") || (t.Alamat == "") || (t.Jenis_kelamin == "") || (t.Nomer_telfon == "") || (t.Tempat_lahir == "") || (t.Tanggal_lahir == "") {
 		c.JSON(400, gin.H{
-			"status": "gagal menambahkan, tidak boleh ada data yang kosong",
+			"status":  "Error",
+			"message": "Tidak boleh ada data yang kosong.",
 		})
 		return
 	}
 	if (t.Jenis_kelamin == "P") || (t.Jenis_kelamin == "L") {
 		db.Create(&add)
 		c.JSON(200, gin.H{
-			"status": "berhasil menambahkan data pasien",
+			"status": "Berhasil",
 			"data":   add,
-			"userID": claims["id"],
+			"user":   claims["id"],
 		})
 	} else {
 		c.JSON(400, gin.H{
-			"status": "gagal menambahkan, jenis kelamin harus di isi dengan P atau L",
+			"status":  "Error",
+			"message": "Jenis kelamin harus di isi dengan L atau P",
 		})
 	}
 

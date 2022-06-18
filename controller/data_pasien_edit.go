@@ -24,16 +24,16 @@ func Edit_data_pasien(c *gin.Context) {
 	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&user)
 	if claims["id"] == user.Email {
 		c.JSON(400, gin.H{
-			"status":  "gagal menampilkan data",
-			"message": "yang berhak mengakses halaman ini hanya dokter atau perawat",
+			"status":  "Error",
+			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
 		})
 		return
 	}
 	var edit edit_data
 	if err := c.ShouldBindJSON(&edit); err != nil {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "input tidak dalam bentuk json",
+			"status":  "Error",
+			"message": "Request harus dalam bentuk JSON.",
 		})
 		return
 	}
@@ -41,8 +41,8 @@ func Edit_data_pasien(c *gin.Context) {
 	db.Where("id = ?", c.Param("id")).Find(&pasien)
 	if pasien.Nama == "" {
 		c.JSON(400, gin.H{
-			"status":  "error",
-			"message": "parameter id yang anda masukan salah",
+			"status":  "Error",
+			"message": "Parameter id tidak ditemukan.",
 		})
 		return
 	}
@@ -54,7 +54,7 @@ func Edit_data_pasien(c *gin.Context) {
 	db.Model(&pasien).Update("tempat_lahir", edit.Tempat_lahir)
 	db.Model(&pasien).Update("tanggal_lahir", edit.Tanggal_lahir)
 	c.JSON(200, gin.H{
-		"status": "berhasil mengedit data pasien",
+		"status": "Berhasil",
 		"data":   pasien,
 		"userID": claims["id"],
 	})

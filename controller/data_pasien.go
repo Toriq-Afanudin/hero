@@ -30,8 +30,8 @@ func DataPasien(c *gin.Context) {
 	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&user)
 	if claims["id"] == user.Email {
 		c.JSON(400, gin.H{
-			"status":  "gagal menampilkan data",
-			"message": "yang berhak mengakses halaman ini hanya dokter atau perawat",
+			"status":  "Error",
+			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
 		})
 		return
 	}
@@ -43,8 +43,8 @@ func DataPasien(c *gin.Context) {
 		db.Model(&d[i]).Update("Jenis_penyakit", p.Pemeriksaan)
 	}
 	c.JSON(200, gin.H{
-		"status": "berhasil menampilkan data pasien",
+		"status": "Berhasil",
 		"data":   d,
-		"userID": claims["id"],
+		"user":   claims["id"],
 	})
 }
