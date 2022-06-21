@@ -44,13 +44,13 @@ func DataPasien(c *gin.Context) {
 		return
 	}
 	var d []pasien
-	db.Raw("SELECT * FROM capstone.pasiens;").Scan(&d)
+	db.Raw("SELECT * FROM pasiens;").Scan(&d)
 	var p penyakit
 	var rkm_medis []rekam_medis
 	for i := 0; i < len(d); i++ {
-		db.Raw("SELECT pemeriksaan FROM capstone.rekam_medis WHERE id=?", d[i].Id).Scan(&p)
+		db.Raw("SELECT pemeriksaan FROM rekam_medis WHERE id=?", d[i].Id).Scan(&p)
 		db.Model(&d[i]).Update("Jenis_penyakit", p.Pemeriksaan)
-		db.Raw("SELECT tanggal, keluhan, pemeriksaan, kode_obat FROM capstone.rekam_medis WHERE id_pasien=?", d[i].Id).Scan(&rkm_medis)
+		db.Raw("SELECT tanggal, keluhan, pemeriksaan, kode_obat FROM rekam_medis WHERE id_pasien=?", d[i].Id).Scan(&rkm_medis)
 		db.Model(&d[i]).Update("Rekam_medis", rkm_medis)
 	}
 	c.JSON(200, gin.H{

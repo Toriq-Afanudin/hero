@@ -156,13 +156,13 @@ func main() {
 		auth.DELETE("hapus_data_pasien/:id", controller.Hapus_data_pasien)
 
 		//MANAGE ACCOUNT
-		auth.GET("/akun_tampil", controller.Akun_tampil)
-		auth.POST("/akun_tambah", controller.TambahAkun)
+		r.POST("/akun_tambah", controller.TambahAkun)
+		r.GET("/akun_tampil", controller.Akun_tampil)
 	}
 
 	godotenv.Load()
 	port := os.Getenv("PORT")
-	var dns = fmt.Sprintf("0.0.0.0%s", port)
+	var dns = fmt.Sprintf("127.0.0.1:%s", port)
 
 	r.Run(dns)
 }
