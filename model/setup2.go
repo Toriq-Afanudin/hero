@@ -23,6 +23,6 @@ func SetupModels() *gorm.DB {
 		panic(err)
 	}
 	fmt.Println("Successfully connected!")
-	db.AutoMigrate(&Pasien{}, &Jadwal{}, &Dokter{}, &Rekam_medis{}, &Obat{}, &Ruangan{}, &Perawat{}, &User{})
+	db.AutoMigrate(&Pasien{}, &Jadwal{}, &Dokter{}, &Rekam_medis{}, &Obat{}, &Ruangan{}, &Perawat{}, &User{}, &Rawat_jalan{})
 	return db
 }

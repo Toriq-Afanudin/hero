@@ -34,12 +34,13 @@ type Dokter struct {
 }
 
 type Rekam_medis struct {
-	Id          int `json:"id"`
-	Tanggal     time.Time
-	Keluhan     string `json:"keluhan"`
-	Pemeriksaan string `json:"pemeriksaan"`
-	Kode_obat   string `json:"kode_obat"`
-	Id_pasien   int    `json:"id_pasien"`
+	Id               int `json:"id"`
+	Tanggal          time.Time
+	Keluhan          string `json:"keluhan"`
+	Pemeriksaan      string `json:"pemeriksaan"`
+	Jenis_penanganan string `json:"jenis_penanganan"`
+	Kode_obat        string `json:"kode_obat"`
+	Id_pasien        int    `json:"id_pasien"`
 }
 
 type Obat struct {
@@ -73,4 +74,10 @@ type User struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Level    string `json:"level"`
+}
+
+type Rawat_jalan struct {
+	Id                 int    `json:"id"`
+	Jadwal_rawat_jalan string `json:"jadwal_rawat_jalan"`
+	Nomer_antrian      string `json:"nomer_antrian"`
 }

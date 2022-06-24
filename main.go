@@ -156,8 +156,11 @@ func main() {
 		auth.DELETE("hapus_data_pasien/:id", controller.Hapus_data_pasien)
 
 		//MANAGE ACCOUNT
-		r.POST("/akun_tambah", controller.TambahAkun)
-		r.GET("/akun_tampil", controller.Akun_tampil)
+		auth.POST("/akun_tambah", controller.TambahAkun)
+		auth.GET("/akun_tampil", controller.Akun_tampil)
+
+		//RAWAT JALAN
+		auth.GET("/rawat_jalan", controller.Rawat_jalan_lihat)
 	}
 
 	godotenv.Load()

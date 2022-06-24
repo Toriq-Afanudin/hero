@@ -10,13 +10,15 @@ import (
 )
 
 type tambah_data struct {
-	Nik           string `json:"nik"`
-	Nama          string `json:"nama"`
-	Alamat        string `json:"alamat"`
-	Jenis_kelamin string `json:"jenis_kelamin"`
-	Nomer_telfon  string `json:"nomer_telfon"`
-	Tempat_lahir  string `json:"tempat_lahir"`
-	Tanggal_lahir string `json:"tanggal_lahir"`
+	Nik              string `json:"nik"`
+	Nama             string `json:"nama"`
+	Alamat           string `json:"alamat"`
+	Jenis_kelamin    string `json:"jenis_kelamin"`
+	Nomer_telfon     string `json:"nomer_telfon"`
+	Tempat_lahir     string `json:"tempat_lahir"`
+	Tanggal_lahir    string `json:"tanggal_lahir"`
+	Jenis_penyakit   string `json:"jenis_penyakit"`
+	Jenis_penanganan string `json:"jenis_penanganan"`
 }
 
 func Tambah_data_pasien(c *gin.Context) {
@@ -56,6 +58,30 @@ func Tambah_data_pasien(c *gin.Context) {
 		})
 		return
 	}
+	var pasien model.Pasien
+	db.Where("nik = ?", t.Nik).Find(&pasien)
+	if t.Nik == pasien.Nik {
+		c.JSON(200, gin.H{
+			"status":  "Berhasil",
+			"message": "NIK sudah tercantum dalam sistem, akan ditambahkan data rekam medis.",
+		})
+		var psn model.Pasien
+		db.Where("nama = ?", t.Nama).Find(&psn)
+		add2 := model.Rekam_medis{
+			Tanggal:          time.Now(),
+			Pemeriksaan:      t.Jenis_penyakit,
+			Jenis_penanganan: t.Jenis_penanganan,
+			Id_pasien:        psn.Id,
+		}
+		db.Create(&add2)
+		if t.Jenis_penanganan == "rawat jalan" {
+			tambah_rawat_jalan := model.Rawat_jalan{
+				Id: psn.Id,
+			}
+			db.Create(&tambah_rawat_jalan)
+		}
+		return
+	}
 	if (t.Jenis_kelamin == "P") || (t.Jenis_kelamin == "L") {
 		db.Create(&add)
 		c.JSON(200, gin.H{
@@ -67,10 +93,18 @@ func Tambah_data_pasien(c *gin.Context) {
 		var psn model.Pasien
 		db.Where("nama = ?", t.Nama).Find(&psn)
 		add2 := model.Rekam_medis{
-			Tanggal:   time.Now(),
-			Id_pasien: psn.Id,
+			Tanggal:          time.Now(),
+			Pemeriksaan:      t.Jenis_penyakit,
+			Jenis_penanganan: t.Jenis_penanganan,
+			Id_pasien:        psn.Id,
 		}
 		db.Create(&add2)
+		if t.Jenis_penanganan == "rawat jalan" {
+			tambah_rawat_jalan := model.Rawat_jalan{
+				Id: psn.Id,
+			}
+			db.Create(&tambah_rawat_jalan)
+		}
 	} else {
 		c.JSON(400, gin.H{
 			"status":  "Error",
