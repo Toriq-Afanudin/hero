@@ -17,8 +17,8 @@ import (
 )
 
 type login struct {
-	Email    string `form:"email" json:"email"`
-	Password string `form:"password" json:"password"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 var identityKey = "id"
@@ -32,6 +32,25 @@ func helloHandler(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"user": claims[identityKey],
 		// "userName": user.(*User).UserName,
+		"level": Pengguna.Level,
+	})
+}
+
+func user(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	var login login
+	if err := c.ShouldBindJSON(&login); err != nil {
+		c.JSON(400, gin.H{
+			"status":  "Error",
+			"message": "Request harus dalam bentuk JSON.",
+		})
+		return
+	}
+	var Pengguna model.User
+	db.Where("email = ?", login.Email).Find(&Pengguna)
+	fmt.Println(Pengguna)
+	c.JSON(200, gin.H{
+		"user":  Pengguna.Email,
 		"level": Pengguna.Level,
 	})
 }
@@ -153,6 +172,7 @@ func main() {
 	}
 
 	r.POST("/login", authMiddleware.LoginHandler)
+	r.GET("/login", user)
 
 	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
 		claims := jwt.ExtractClaims(c)
