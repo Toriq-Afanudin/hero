@@ -9,6 +9,7 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 
 	"github.com/joho/godotenv"
 	"heroku.com/controller"
@@ -24,11 +25,14 @@ var identityKey = "id"
 
 func helloHandler(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
-	user, _ := c.Get(identityKey)
+	db := c.MustGet("db").(*gorm.DB)
+	// user, _ := c.Get(identityKey)
+	var Pengguna model.User
+	db.Where("email = ?", claims[identityKey]).Find(&Pengguna)
 	c.JSON(200, gin.H{
-		"userID":   claims[identityKey],
-		"userName": user.(*User).UserName,
-		"text":     "Hello World.",
+		"user": claims[identityKey],
+		// "userName": user.(*User).UserName,
+		"level": Pengguna.Level,
 	})
 }
 
