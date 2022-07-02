@@ -7,6 +7,6 @@ import (
 
 func Utama(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"data": "selamat datang di aplikasi hospital",
+		"message": "Hello Word!!!",
 	})
 }

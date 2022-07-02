@@ -1,61 +1,54 @@
 package controller
 
 import (
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"heroku.com/model"
 )
 
 type pasien struct {
-	Id             int    `form:"id"`
-	Nik            string `form:"nik"`
-	Nama           string `form:"nama"`
-	Alamat         string `form:"alamat"`
-	Jenis_kelamin  string `form:"jenis_kelamin"`
-	Jenis_penyakit interface{}
-	No_hp          string `form:"no_hp"`
-	Tempat_lahir   string `form:"tempat_lahir"`
-	Tanggal_lahir  string `form:"tanggal_lahir"`
-	Rekam_medis    interface{}
-}
-
-type penyakit struct {
-	Pemeriksaan string `form:"pemeriksaan"`
+	Id            int    `json:"id"`
+	Nik           string `json:"nik"`
+	Nama          string `json:"nama"`
+	Alamat        string `json:"alamat"`
+	Jenis_kelamin string `json:"jenis_kelamin"`
+	No_hp         string `json:"no_hp"`
+	Tempat_lahir  string `json:"tempat_lahir"`
+	Tanggal_lahir string `json:"tanggal_lahir"`
+	Rekam_medis   interface{}
 }
 
 type rekam_medis struct {
-	Tanggal     string `json:"tanggal"`
-	Keluhan     string `json:"keluhan"`
-	Pemeriksaan string `json:"pemeriksaan"`
-	Kode_obat   string `json:"kode_obat"`
+	Tanggal          string `json:"tanggal"`
+	Keluhan          string `json:"keluhan"`
+	Poli             string `json:"poli"`
+	Pemeriksaan      string `json:"pemeriksaan"`
+	Jenis_penanganan string `json:"jenis_penanganan"`
 }
 
 func DataPasien(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
 	db := c.MustGet("db").(*gorm.DB)
-	var user model.User
-	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&user)
-	if claims["id"] == user.Email {
-		c.JSON(400, gin.H{
-			"status":  "Error",
-			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
-		})
-		return
-	}
-	var d []pasien
-	db.Raw("SELECT * FROM pasiens;").Scan(&d)
-	var p penyakit
-	var rkm_medis []rekam_medis
-	for i := 0; i < len(d); i++ {
-		db.Raw("SELECT pemeriksaan FROM rekam_medis WHERE id=?", d[i].Id).Scan(&p)
-		db.Model(&d[i]).Update("Jenis_penyakit", p.Pemeriksaan)
-		db.Raw("SELECT tanggal, keluhan, pemeriksaan, kode_obat FROM rekam_medis WHERE id_pasien=?", d[i].Id).Scan(&rkm_medis)
-		db.Model(&d[i]).Update("Rekam_medis", rkm_medis)
+	var mPasien []model.Pasien
+	db.Find(&mPasien)
+	var data []interface{}
+	for i := 0; i < len(mPasien); i++ {
+		var rekam_medis []rekam_medis
+		db.Raw("select tanggal, keluhan, poli, pemeriksaan, jenis_penanganan from rekam_medis where id_pasien=?", mPasien[i].Id).Scan(&rekam_medis)
+		tampil := pasien{
+			Id:            mPasien[i].Id,
+			Nik:           mPasien[i].Nik,
+			Nama:          mPasien[i].Nama,
+			Alamat:        mPasien[i].Alamat,
+			Jenis_kelamin: mPasien[i].Jenis_kelamin,
+			No_hp:         mPasien[i].No_hp,
+			Tempat_lahir:  mPasien[i].Tempat_lahir,
+			Tanggal_lahir: mPasien[i].Tanggal_lahir,
+			Rekam_medis:   rekam_medis,
+		}
+		data = append(data, tampil)
 	}
 	c.JSON(200, gin.H{
-		"status": "Berhasil",
-		"data":   d,
-		"user":   claims["id"],
+		"code": 200,
+		"data": data,
 	})
 }

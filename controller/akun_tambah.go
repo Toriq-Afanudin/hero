@@ -1,7 +1,6 @@
 package controller
 
 import (
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"heroku.com/model"
@@ -15,28 +14,18 @@ type User struct {
 }
 
 func TambahAkun(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
 	db := c.MustGet("db").(*gorm.DB)
-	var use model.User
-	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&use)
-	if claims["id"] == use.Email {
-		c.JSON(400, gin.H{
-			"status":  "Error",
-			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
-		})
-		return
-	}
 	var tambah User
 	if err := c.ShouldBindJSON(&tambah); err != nil {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
 			"message": "Request harus dalam bentuk JSON.",
 		})
 		return
 	}
 	if (tambah.Nickname == "") || (tambah.Email == "") || (tambah.Password == "") || (tambah.Level == "") {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
 			"message": "Data tidak boleh ada yang kosong.",
 		})
 		return
@@ -45,7 +34,7 @@ func TambahAkun(c *gin.Context) {
 	db.Where("nickname = ?", tambah.Nickname).Find(&user)
 	if user.Nickname == tambah.Nickname {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
 			"message": "Nickname sudah digunakan.",
 		})
 		return
@@ -53,14 +42,14 @@ func TambahAkun(c *gin.Context) {
 	db.Where("email = ?", tambah.Email).Find(&user)
 	if user.Email == tambah.Email {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
 			"message": "Email sudah digunakan.",
 		})
 		return
 	}
 	if len(tambah.Password) < 8 {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
 			"message": "Password minimal terdiri dari 8 karakter.",
 		})
 		return
@@ -70,7 +59,7 @@ func TambahAkun(c *gin.Context) {
 		pekerjaan = true
 	} else {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
 			"message": "Pilih jenis pekerjaan sebagai admin, dokter, atau perawat.",
 		})
 		return
@@ -91,19 +80,21 @@ func TambahAkun(c *gin.Context) {
 				Id_user: mod.Id,
 			}
 			db.Create(&new)
-			message = "Lengkapi data dokter " + tambah.Nickname
+			message = "Dokter " + tambah.Nickname + " diharuskan melengkapi data sendiri"
 		}
 		if tambah.Level == "perawat" {
 			new := model.Perawat{
 				Id_user: mod.Id,
 			}
 			db.Create(&new)
-			message = "Lengkapi data perawat " + tambah.Nickname
+			message = "Perawat " + tambah.Nickname + " diharuskan melengkapi data sendiri"
+		}
+		if tambah.Level == "admin" {
+			message = tambah.Nickname + " resmi menjadi admin baru"
 		}
 		c.JSON(200, gin.H{
-			"status":  "Berhasil",
-			"data":    tambah.Nickname,
-			"user":    claims["id"],
+			"code":    200,
+			"data":    tambah,
 			"message": message,
 		})
 	}

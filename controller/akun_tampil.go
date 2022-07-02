@@ -1,7 +1,6 @@
 package controller
 
 import (
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"heroku.com/model"
@@ -18,17 +17,7 @@ type user struct {
 }
 
 func Akun_tampil(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
 	db := c.MustGet("db").(*gorm.DB)
-	var use model.User
-	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&use)
-	if claims["id"] == use.Email {
-		c.JSON(400, gin.H{
-			"status":  "Error",
-			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
-		})
-		return
-	}
 	var akun []user
 	db.Raw("SELECT id, email, password, level FROM users WHERE level=? OR level=?", "perawat", "dokter").Scan(&akun)
 	for i := 0; i < len(akun); i++ {
@@ -48,8 +37,7 @@ func Akun_tampil(c *gin.Context) {
 		}
 	}
 	c.JSON(200, gin.H{
-		"status": "Berhasil",
-		"data":   akun,
-		"user":   claims["id"],
+		"code": 200,
+		"data": akun,
 	})
 }

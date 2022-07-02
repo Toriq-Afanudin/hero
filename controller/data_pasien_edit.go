@@ -1,7 +1,6 @@
 package controller
 
 import (
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"heroku.com/model"
@@ -18,17 +17,7 @@ type edit_data struct {
 }
 
 func Edit_data_pasien(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
 	db := c.MustGet("db").(*gorm.DB)
-	var user model.User
-	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&user)
-	if claims["id"] == user.Email {
-		c.JSON(400, gin.H{
-			"status":  "Error",
-			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
-		})
-		return
-	}
 	var edit edit_data
 	if err := c.ShouldBindJSON(&edit); err != nil {
 		c.JSON(400, gin.H{
@@ -54,8 +43,7 @@ func Edit_data_pasien(c *gin.Context) {
 	db.Model(&pasien).Update("tempat_lahir", edit.Tempat_lahir)
 	db.Model(&pasien).Update("tanggal_lahir", edit.Tanggal_lahir)
 	c.JSON(200, gin.H{
-		"status": "Berhasil",
-		"data":   pasien,
-		"userID": claims["id"],
+		"code": 200,
+		"data": pasien,
 	})
 }

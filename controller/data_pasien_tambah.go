@@ -3,7 +3,6 @@ package controller
 import (
 	"time"
 
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"heroku.com/model"
@@ -17,99 +16,64 @@ type tambah_data struct {
 	Nomer_telfon     string `json:"nomer_telfon"`
 	Tempat_lahir     string `json:"tempat_lahir"`
 	Tanggal_lahir    string `json:"tanggal_lahir"`
-	Jenis_penyakit   string `json:"jenis_penyakit"`
+	Poli             string `json:"poli"`
 	Jenis_penanganan string `json:"jenis_penanganan"`
 }
 
 func Tambah_data_pasien(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
 	db := c.MustGet("db").(*gorm.DB)
-	var user model.User
-	db.Where("email = ?", claims["id"]).Where("level = ?", "admin").Find(&user)
-	if claims["id"] == user.Email {
+	var data tambah_data
+	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(400, gin.H{
-			"status":  "Error",
-			"message": "Halaman ini hanya bisa diakses oleh dokter atau perawat.",
-		})
-		return
-	}
-	var t tambah_data
-	if err := c.ShouldBindJSON(&t); err != nil {
-		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
 			"message": "Request harus dalam bentuk JSON.",
 		})
 		return
 	}
-	add := model.Pasien{
-		Nik:           t.Nik,
-		Nama:          t.Nama,
-		Alamat:        t.Alamat,
-		Jenis_kelamin: t.Jenis_kelamin,
-		No_hp:         t.Nomer_telfon,
-		Tempat_lahir:  t.Tempat_lahir,
-		Tanggal_lahir: t.Tanggal_lahir,
-	}
-
-	if (t.Nik == "") || (t.Nama == "") || (t.Alamat == "") || (t.Jenis_kelamin == "") || (t.Nomer_telfon == "") || (t.Tempat_lahir == "") || (t.Tanggal_lahir == "") {
-		c.JSON(400, gin.H{
-			"status":  "Error",
-			"message": "Tidak boleh ada data yang kosong.",
-		})
-		return
-	}
 	var pasien model.Pasien
-	db.Where("nik = ?", t.Nik).Find(&pasien)
-	if t.Nik == pasien.Nik {
-		c.JSON(200, gin.H{
-			"status":  "Berhasil",
-			"message": "NIK sudah tercantum dalam sistem, akan ditambahkan data rekam medis.",
+	db.Where("nik = ?", data.Nik).Find(&pasien)
+	if data.Nik == pasien.Nik {
+		c.JSON(400, gin.H{
+			"code":    400,
+			"message": "NIK sudah digunakan, pasien telah terdaftar.",
 		})
-		var psn model.Pasien
-		db.Where("nama = ?", t.Nama).Find(&psn)
-		add2 := model.Rekam_medis{
-			Tanggal:          time.Now(),
-			Pemeriksaan:      t.Jenis_penyakit,
-			Jenis_penanganan: t.Jenis_penanganan,
-			Id_pasien:        psn.Id,
-		}
-		db.Create(&add2)
-		if t.Jenis_penanganan == "rawat jalan" {
-			tambah_rawat_jalan := model.Rawat_jalan{
-				Id: psn.Id,
-			}
-			db.Create(&tambah_rawat_jalan)
-		}
 		return
 	}
-	if (t.Jenis_kelamin == "P") || (t.Jenis_kelamin == "L") {
-		db.Create(&add)
-		c.JSON(200, gin.H{
-			"status":  "Berhasil",
-			"data":    add,
-			"user":    claims["id"],
-			"message": "Lengkapi data rekam medis.",
-		})
-		var psn model.Pasien
-		db.Where("nama = ?", t.Nama).Find(&psn)
-		add2 := model.Rekam_medis{
-			Tanggal:          time.Now(),
-			Pemeriksaan:      t.Jenis_penyakit,
-			Jenis_penanganan: t.Jenis_penanganan,
-			Id_pasien:        psn.Id,
-		}
-		db.Create(&add2)
-		if t.Jenis_penanganan == "rawat jalan" {
-			tambah_rawat_jalan := model.Rawat_jalan{
-				Id: psn.Id,
-			}
-			db.Create(&tambah_rawat_jalan)
-		}
-	} else {
-		c.JSON(400, gin.H{
-			"status":  "Error",
-			"message": "Jenis kelamin harus di isi dengan L atau P",
-		})
+	db.Find(&pasien)
+	id := pasien.Id + 1
+	tambah := model.Pasien{
+		Id:            id,
+		Nik:           data.Nik,
+		Nama:          data.Nama,
+		Alamat:        data.Alamat,
+		Jenis_kelamin: data.Jenis_kelamin,
+		No_hp:         data.Nomer_telfon,
+		Tempat_lahir:  data.Tempat_lahir,
+		Tanggal_lahir: data.Tanggal_lahir,
 	}
-
+	db.Create(&tambah)
+	rekam_medis := model.Rekam_medis{
+		Id_pasien:        id,
+		Tanggal:          time.Now(),
+		Poli:             data.Poli,
+		Jenis_penanganan: data.Jenis_penanganan,
+	}
+	db.Create(&rekam_medis)
+	if data.Jenis_penanganan == "rawat jalan" {
+		rawat_jalan := model.Rawat_jalan{
+			Id: id,
+		}
+		db.Create(&rawat_jalan)
+		c.JSON(200, gin.H{
+			"code":    200,
+			"data":    tambah,
+			"message": "Lengkapi data rekam medis dan rawat jalan.",
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"code":    200,
+		"data":    tambah,
+		"message": "Lengkapi data rekam medis.",
+	})
 }
