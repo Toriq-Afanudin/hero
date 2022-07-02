@@ -36,6 +36,8 @@ func main() {
 		}
 	})
 
+	r.GET("/", controller.Utama)
+
 	r.POST("/login", controller.Login)
 
 	admin := r.Group("/admin")

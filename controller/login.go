@@ -16,7 +16,7 @@ func Login(c *gin.Context) {
 	var login login
 	if err := c.ShouldBindJSON(&login); err != nil {
 		c.JSON(400, gin.H{
-			"code":400,
+			"code":    400,
 			"message": "Request harus dalam bentuk JSON.",
 		})
 		return
@@ -25,14 +25,14 @@ func Login(c *gin.Context) {
 	db.Where("email = ?", login.Email).Where("password = ?", login.Password).Find(&user)
 	if login.Email == user.Email {
 		c.JSON(200, gin.H{
-			"code":200,
-			"id":  user.Id,
-			"level":  user.Level,
+			"code":  200,
+			"id":    user.Id,
+			"level": user.Level,
 		})
 	} else {
-		c.JSON(200, gin.H{
-			"status": "Error",
-			"message":"Email atau Password salah",
+		c.JSON(400, gin.H{
+			"code":    400,
+			"message": "Email atau Password salah",
 		})
 	}
 }
