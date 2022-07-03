@@ -56,13 +56,17 @@ func main() {
 	admin.PUT("/data_dokter_edit/:id", controller.Data_dokter_edit)
 	admin.DELETE("/data_dokter_hapus/:id", controller.Data_dokter_hapus)
 
+	admin.GET("/data_perawat_lihat", controller.Data_perawat_lihat)
+	admin.PUT("/data_perawat_edit/:id", controller.Data_perawat_edit)
+	admin.DELETE("/data_perawat_hapus/:id", controller.Data_perawat_hapus)
+
 	dokter := r.Group("/dokter")
 	dokter.PUT("/akun_dokter_update/:id", controller.Edit_akun_dokter_by_id)
 	dokter.GET("/akun_dokter_lihat", controller.Lihat_akun_dokter)
 
 	godotenv.Load()
 	port := os.Getenv("PORT")
-	var dns = fmt.Sprintf("127.0.0.1:%s", port)
+	var dns = fmt.Sprintf("0.0.0.0:%s", port)
 
 	r.Run(dns)
 }

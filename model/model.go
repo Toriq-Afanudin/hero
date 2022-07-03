@@ -69,6 +69,7 @@ type Perawat struct {
 	Bagian_kerja  string `json:"bagian_kerja"`
 	Jadwal_kerja  string `json:"jadwal_kerja"`
 	Jabatan       string `json:"jabatan"`
+	Nomor_telfon  string `json:"nomor_telfon"`
 	Nomor_str     string `json:"nomor_str"`
 }
 
