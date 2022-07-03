@@ -28,7 +28,7 @@ type rawat_jalan struct {
 func Rawat_jalan_lihat(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var rJalan []model.Rawat_jalan
-	db.Find(&rJalan)
+	db.Where("poli = ?", c.Param("poli")).Find(&rJalan)
 	var daftarRawatJalan []interface{}
 	for i := 0; i < len(rJalan); i++ {
 		var pasien model.Pasien
