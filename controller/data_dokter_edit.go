@@ -36,7 +36,7 @@ func Data_dokter_edit(c *gin.Context) {
 		return
 	}
 	db.Model(&dokter).Update("sip", eDokter.Sip)
-	db.Model(&dokter).Update("nama", eDokter.Nama)
+	db.Model(&dokter).Update("nama_dokter", eDokter.Nama)
 	db.Model(&dokter).Update("jenis_kelamin", eDokter.Jenis_kelamin)
 	db.Model(&dokter).Update("spesialis", eDokter.Spesialis)
 	db.Model(&dokter).Update("jadwal_praktek", eDokter.Jadwal_praktek)
