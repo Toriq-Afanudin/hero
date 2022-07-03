@@ -81,9 +81,12 @@ type User struct {
 }
 
 type Rawat_jalan struct {
-	Id                 int    `json:"id"`
-	Jadwal_rawat_jalan string `json:"jadwal_rawat_jalan"`
-	Nomer_antrian      string `json:"nomer_antrian"`
-	Tanggal            string `json:"tanggal"`
-	Keterangan         string `json:"keterangan"`
+	Id                 int       `json:"id"`
+	Jadwal_rawat_jalan string    `json:"jadwal_rawat_jalan"`
+	Nomer_antrian      int       `json:"nomer_antrian"`
+	Tanggal            time.Time `json:"tanggal"`
+	Keterangan         string    `json:"keterangan"`
+	Poli               string    `json:"poli"`
+	Bool               int       `json:"bool"`
+	Id_pasien          int       `json:"id_pasien"`
 }

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -30,6 +31,13 @@ func Tambah_data_pasien(c *gin.Context) {
 		})
 		return
 	}
+	if (data.Nik == "") || (data.Nama == "") || (data.Alamat == "") || (data.Jenis_kelamin == "") || (data.Nomer_telfon == "") || (data.Tempat_lahir == "") || (data.Tanggal_lahir == "") || (data.Poli == "") || (data.Jenis_penanganan == "") {
+		c.JSON(400, gin.H{
+			"code":    400,
+			"message": "Tidak boleh ada data yang kosong.",
+		})
+		return
+	}
 	var pasien model.Pasien
 	db.Where("nik = ?", data.Nik).Find(&pasien)
 	if data.Nik == pasien.Nik {
@@ -39,10 +47,18 @@ func Tambah_data_pasien(c *gin.Context) {
 		})
 		return
 	}
-	db.Find(&pasien)
-	id := pasien.Id + 1
+	var poli []string
+	poli = append(poli, "gigi", "kulit", "tht", "umum")
+	if (data.Poli == poli[0]) || (data.Poli == poli[1]) || (data.Poli == poli[2]) || (data.Poli == poli[3]) {
+		fmt.Println("poli benar")
+	} else {
+		c.JSON(400, gin.H{
+			"code":    400,
+			"message": "Poli yang tersedia: gigi, kulit, tht, dan umum.",
+		})
+		return
+	}
 	tambah := model.Pasien{
-		Id:            id,
 		Nik:           data.Nik,
 		Nama:          data.Nama,
 		Alamat:        data.Alamat,
@@ -52,16 +68,29 @@ func Tambah_data_pasien(c *gin.Context) {
 		Tanggal_lahir: data.Tanggal_lahir,
 	}
 	db.Create(&tambah)
+	db.Where("nik = ?", data.Nik).Find(&pasien)
 	rekam_medis := model.Rekam_medis{
-		Id_pasien:        id,
+		Id_pasien:        pasien.Id,
 		Tanggal:          time.Now(),
 		Poli:             data.Poli,
 		Jenis_penanganan: data.Jenis_penanganan,
 	}
 	db.Create(&rekam_medis)
 	if data.Jenis_penanganan == "rawat jalan" {
+		var no int
+		for i := 0; i < len(poli); i++ {
+			if data.Poli == poli[i] {
+				var mRJalan model.Rawat_jalan
+				db.Where("poli = ?", poli[i]).Where("bool = ?", 0).Find(&mRJalan)
+				no = mRJalan.Nomer_antrian + 1
+				break
+			}
+		}
 		rawat_jalan := model.Rawat_jalan{
-			Id: id,
+			Id_pasien:     pasien.Id,
+			Tanggal:       time.Now(),
+			Poli:          data.Poli,
+			Nomer_antrian: no,
 		}
 		db.Create(&rawat_jalan)
 		c.JSON(200, gin.H{

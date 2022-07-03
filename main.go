@@ -47,7 +47,9 @@ func main() {
 	admin.POST("/data_pasien_tambah", controller.Tambah_data_pasien)
 	admin.GET("/data_pasien", controller.DataPasien)
 	admin.PUT("/data_pasien_edit/:id", controller.Edit_data_pasien)
-	admin.DELETE("/data_pasien_hapus?:id", controller.Hapus_data_pasien)
+	admin.DELETE("/data_pasien_hapus/:id", controller.Hapus_data_pasien)
+
+	admin.GET("/rawat_jalan_lihat", controller.Rawat_jalan_lihat)
 
 	dokter := r.Group("/dokter")
 	dokter.PUT("/akun_dokter_update/:id", controller.Edit_akun_dokter_by_id)
