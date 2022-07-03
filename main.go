@@ -52,6 +52,10 @@ func main() {
 	admin.GET("/rawat_jalan_lihat/:poli", controller.Rawat_jalan_lihat)
 	admin.PUT("/rawat_jalan_edit/:id", controller.Rawat_jalan_edit)
 
+	admin.GET("/data_dokter_lihat", controller.Data_dokter_lihat)
+	admin.PUT("/data_dokter_edit/:id", controller.Data_dokter_edit)
+	admin.DELETE("/data_dokter_hapus/:id", controller.Data_dokter_hapus)
+
 	dokter := r.Group("/dokter")
 	dokter.PUT("/akun_dokter_update/:id", controller.Edit_akun_dokter_by_id)
 	dokter.GET("/akun_dokter_lihat", controller.Lihat_akun_dokter)
