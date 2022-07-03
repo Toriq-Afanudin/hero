@@ -16,6 +16,8 @@ type rawat_jalan struct {
 	Jenis_kelamin      string `json:"jenis_kelamin"`
 	Jadwal_rawat_jalan string `json:"jadwal_rawat_jalan"`
 	Nomer_antrian      string `json:"nomer_antrian"`
+	Proses             string `json:"proses"`
+	Keterangan         string `json:"keterangan"`
 	No_hp              string `json:"no_hp"`
 	Tempat_lahir       string `json:"tempat_lahir"`
 	Tanggal_lahir      string `json:"tanggal_lahir"`
@@ -49,6 +51,12 @@ func Rawat_jalan_lihat(c *gin.Context) {
 		var nomor = rJalan[i].Nomer_antrian
 		var str = strconv.Itoa(nomor)
 		nAntrian := poli + str
+		var proses string
+		if rJalan[i].Bool == 0 {
+			proses = "antre"
+		} else {
+			proses = "done"
+		}
 		new := rawat_jalan{
 			Id:                 pasien.Id,
 			Nik:                pasien.Nik,
@@ -57,6 +65,8 @@ func Rawat_jalan_lihat(c *gin.Context) {
 			Jenis_kelamin:      pasien.Jenis_kelamin,
 			Jadwal_rawat_jalan: rJalan[i].Jadwal_rawat_jalan,
 			Nomer_antrian:      nAntrian,
+			Proses:             proses,
+			Keterangan:         rJalan[i].Keterangan,
 			No_hp:              pasien.No_hp,
 			Tempat_lahir:       pasien.Tempat_lahir,
 			Tanggal_lahir:      pasien.Tanggal_lahir,
