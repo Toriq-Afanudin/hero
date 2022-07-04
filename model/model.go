@@ -32,7 +32,6 @@ type Dokter struct {
 	Jadwal_praktek string `json:"jadwal_praktek"`
 	Nomor_str      string `json:"nomor_str"`
 	Nomor_telfon   string `json:"nomor_telfon"`
-	Poli           string `json:"poli"`
 }
 
 type Rekam_medis struct {

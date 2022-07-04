@@ -41,8 +41,9 @@ func main() {
 	r.POST("/login", controller.Login)
 
 	admin := r.Group("/admin")
-	admin.POST("/akun_tambah", controller.TambahAkun)
+	admin.POST("/akun_tambah", controller.Akun_tambah)
 	admin.GET("/akun_tampil", controller.Akun_tampil)
+	admin.DELETE("/akun_hapus/:id", controller.Akun_hapus)
 
 	admin.POST("/data_pasien_tambah", controller.Tambah_data_pasien)
 	admin.GET("/data_pasien", controller.DataPasien)
@@ -66,7 +67,7 @@ func main() {
 
 	godotenv.Load()
 	port := os.Getenv("PORT")
-	var dns = fmt.Sprintf("127.0.0.1:%s", port)
+	var dns = fmt.Sprintf("0.0.0.0:%s", port)
 
 	r.Run(dns)
 }

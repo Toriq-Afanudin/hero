@@ -8,7 +8,7 @@ import (
 
 func Data_perawat_lihat(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var perawat model.Perawat
+	var perawat []model.Perawat
 	db.Find(&perawat)
 	c.JSON(200, gin.H{
 		"code": 200,

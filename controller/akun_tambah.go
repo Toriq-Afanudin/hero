@@ -13,7 +13,7 @@ type User struct {
 	Level    string `json:"level"`
 }
 
-func TambahAkun(c *gin.Context) {
+func Akun_tambah(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var tambah User
 	if err := c.ShouldBindJSON(&tambah); err != nil {

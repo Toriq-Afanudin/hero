@@ -23,7 +23,8 @@ func Data_perawat_edit(c *gin.Context) {
 	db.Where("id_user = ?", c.Param("id")).Find(&mPerawat)
 	if mPerawat.Id_user == 0 {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
+			"data":    "-",
 			"message": "Parameter id tidak ditemukan.",
 		})
 		return
@@ -31,19 +32,29 @@ func Data_perawat_edit(c *gin.Context) {
 	var perawat perawat
 	if err := c.ShouldBindJSON(&perawat); err != nil {
 		c.JSON(400, gin.H{
-			"status":  "Error",
+			"code":    400,
+			"data":    "-",
 			"message": "Request harus dalam bentuk JSON.",
 		})
 		return
 	}
-	db.Model(&mPerawat).Update("sip", perawat.Sip)
-	db.Model(&mPerawat).Update("nama_perawat", perawat.Nama)
-	db.Model(&mPerawat).Update("jenis_kelamin", perawat.Jenis_kelamin)
-	db.Model(&mPerawat).Update("bagian_kerja", perawat.Bagian_kerja)
-	db.Model(&mPerawat).Update("jadwal_kerja", perawat.Jadwal_kerja)
-	db.Model(&mPerawat).Update("jabatan", perawat.Jabatan)
-	db.Model(&mPerawat).Update("nomor_telfon", perawat.Nomor_telfon)
-	db.Model(&mPerawat).Update("nomor_str", perawat.Nomor_str)
+	if perawat.Bagian_kerja == "umum" {
+	} else {
+		c.JSON(400, gin.H{
+			"code":    400,
+			"data":    "-",
+			"message": "Bagian kerja yang dibutuhkan: umum, gigi, kulit, tht.",
+		})
+		return
+	}
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("sip", perawat.Sip)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("nama_perawat", perawat.Nama)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("jenis_kelamin", perawat.Jenis_kelamin)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("bagian_kerja", perawat.Bagian_kerja)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("jadwal_kerja", perawat.Jadwal_kerja)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("jabatan", perawat.Jabatan)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("nomor_telfon", perawat.Nomor_telfon)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("nomor_str", perawat.Nomor_str)
 	c.JSON(200, gin.H{
 		"code":    200,
 		"data":    perawat,

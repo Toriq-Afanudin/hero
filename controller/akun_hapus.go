@@ -6,11 +6,11 @@ import (
 	"heroku.com/model"
 )
 
-func Data_dokter_hapus(c *gin.Context) {
+func Akun_hapus(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var dokter model.Dokter
-	db.Where("id_user = ?", c.Param("id")).Find(&dokter)
-	if dokter.Id_user == 0 {
+	var akun model.User
+	db.Where("id = ?", c.Param("id")).Find(&akun)
+	if akun.Id == 0 {
 		c.JSON(400, gin.H{
 			"code":    400,
 			"data":    "-",
@@ -18,10 +18,10 @@ func Data_dokter_hapus(c *gin.Context) {
 		})
 		return
 	}
-	db.Where("id_user = ?", c.Param("id")).Delete(&dokter)
+	db.Where("id = ?", c.Param("id")).Delete(&akun)
 	c.JSON(200, gin.H{
 		"code":    200,
-		"data":    dokter,
-		"message": "Data dokter berhasil dihapus.",
+		"data":    akun,
+		"message": "Data user berhasil dihapus.",
 	})
 }
