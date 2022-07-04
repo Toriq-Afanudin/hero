@@ -21,6 +21,15 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+	if (login.Email == "") || (login.Password == "") {
+		if err := c.ShouldBindJSON(&login); err != nil {
+			c.JSON(400, gin.H{
+				"code":    400,
+				"message": "Email dan password tidak boleh kosong.",
+			})
+			return
+		}
+	}
 	var user model.User
 	db.Where("email = ?", login.Email).Where("password = ?", login.Password).Find(&user)
 	if (login.Email == user.Email) && (login.Password == user.Password) {
