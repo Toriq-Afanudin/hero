@@ -23,7 +23,7 @@ func Login(c *gin.Context) {
 	}
 	var user model.User
 	db.Where("email = ?", login.Email).Where("password = ?", login.Password).Find(&user)
-	if (login.Email == user.Email)||(login.Password==user.Password) {
+	if (login.Email == user.Email) && (login.Password == user.Password) {
 		c.JSON(200, gin.H{
 			"code":  200,
 			"id":    user.Id,
