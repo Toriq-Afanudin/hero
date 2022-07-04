@@ -66,7 +66,7 @@ func main() {
 
 	godotenv.Load()
 	port := os.Getenv("PORT")
-	var dns = fmt.Sprintf("0.0.0.0:%s", port)
+	var dns = fmt.Sprintf("127.0.0.1:%s", port)
 
 	r.Run(dns)
 }

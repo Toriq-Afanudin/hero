@@ -18,20 +18,22 @@ type eDokter struct {
 
 func Data_dokter_edit(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var dokter model.Dokter
-	db.Where("id_user = ?", c.Param("id")).Find(dokter)
-	if dokter.Id_user == 0 {
-		c.JSON(400, gin.H{
-			"code":    400,
-			"message": "Parameter id yang anda masukan salah.",
-		})
-		return
-	}
 	var eDokter eDokter
 	if err := c.ShouldBindJSON(&eDokter); err != nil {
 		c.JSON(400, gin.H{
 			"code":    400,
+			"data":    "-",
 			"message": "Request harus dalam bentuk JSON.",
+		})
+		return
+	}
+	var dokter model.Dokter
+	db.Where("id_user = ?", c.Param("id")).Find(&dokter)
+	if dokter.Id_user == 0 {
+		c.JSON(400, gin.H{
+			"code":    400,
+			"data":    "-",
+			"message": "Parameter id yang anda masukan salah.",
 		})
 		return
 	}
@@ -43,7 +45,8 @@ func Data_dokter_edit(c *gin.Context) {
 	db.Model(&dokter).Update("nomor_str", eDokter.Nomor_str)
 	db.Model(&dokter).Update("nomor_telfon", eDokter.Nomor_telfon)
 	c.JSON(200, gin.H{
-		"code": 200,
-		"data": eDokter,
+		"code":    200,
+		"data":    eDokter,
+		"message": "Data dokter berhasil dirubah.",
 	})
 }

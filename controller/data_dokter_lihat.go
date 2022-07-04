@@ -8,7 +8,7 @@ import (
 
 func Data_dokter_lihat(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var dokter model.Dokter
+	var dokter []model.Dokter
 	db.Find(&dokter)
 	c.JSON(200, gin.H{
 		"code": 200,
