@@ -27,7 +27,7 @@ type Dokter struct {
 	Id_user        int    `json:"id_user"`
 	Sip            string `json:"sip"`
 	Nama_dokter    string `json:"nama_dokter"`
-	Spesialis      string `json:"spesialis"`
+	Poli           string `json:"poli"`
 	Jenis_kelamin  string `json:"jenis_kelamin"`
 	Jadwal_praktek string `json:"jadwal_praktek"`
 	Nomor_str      string `json:"nomor_str"`
@@ -41,7 +41,7 @@ type Rekam_medis struct {
 	Poli             string `json:"poli"`
 	Pemeriksaan      string `json:"pemeriksaan"`
 	Jenis_penanganan string `json:"jenis_penanganan"`
-	Kode_obat        string `json:"kode_obat"`
+	Nomor_antrian    int    `json:"nomor_antrian"`
 	Id_pasien        int    `json:"id_pasien"`
 }
 
@@ -66,7 +66,7 @@ type Perawat struct {
 	Sip           string `json:"sip"`
 	Nama_perawat  string `json:"nama_perawat"`
 	Jenis_kelamin string `json:"jenis_kelamin"`
-	Bagian_kerja  string `json:"bagian_kerja"`
+	Poli          string `json:"poli"`
 	Jadwal_kerja  string `json:"jadwal_kerja"`
 	Jabatan       string `json:"jabatan"`
 	Nomor_telfon  string `json:"nomor_telfon"`
@@ -88,6 +88,6 @@ type Rawat_jalan struct {
 	Tanggal            time.Time `json:"tanggal"`
 	Keterangan         string    `json:"keterangan"`
 	Poli               string    `json:"poli"`
-	Bool               int       `json:"bool"`
+	Bool               bool      `json:"bool"`
 	Id_pasien          int       `json:"id_pasien"`
 }

@@ -10,15 +10,14 @@ import (
 )
 
 type tambah_data struct {
-	Nik              string `json:"nik"`
-	Nama             string `json:"nama"`
-	Alamat           string `json:"alamat"`
-	Jenis_kelamin    string `json:"jenis_kelamin"`
-	Nomer_telfon     string `json:"nomer_telfon"`
-	Tempat_lahir     string `json:"tempat_lahir"`
-	Tanggal_lahir    string `json:"tanggal_lahir"`
-	Poli             string `json:"poli"`
-	Jenis_penanganan string `json:"jenis_penanganan"`
+	Nik           string `json:"nik"`
+	Nama          string `json:"nama"`
+	Jenis_kelamin string `json:"jenis_kelamin"`
+	Poli          string `json:"poli"`
+	Alamat        string `json:"alamat"`
+	No_hp         string `json:"no_hp"`
+	Tempat_lahir  string `json:"tempat_lahir"`
+	Tanggal_lahir string `json:"tanggal_lahir"`
 }
 
 func Tambah_data_pasien(c *gin.Context) {
@@ -31,7 +30,7 @@ func Tambah_data_pasien(c *gin.Context) {
 		})
 		return
 	}
-	if (data.Nik == "") || (data.Nama == "") || (data.Alamat == "") || (data.Jenis_kelamin == "") || (data.Nomer_telfon == "") || (data.Tempat_lahir == "") || (data.Tanggal_lahir == "") || (data.Poli == "") || (data.Jenis_penanganan == "") {
+	if (data.Nik == "") || (data.Nama == "") || (data.Alamat == "") || (data.Jenis_kelamin == "") || (data.No_hp == "") || (data.Tempat_lahir == "") || (data.Tanggal_lahir == "") || (data.Poli == "") {
 		c.JSON(400, gin.H{
 			"code":    400,
 			"message": "Tidak boleh ada data yang kosong.",
@@ -48,13 +47,13 @@ func Tambah_data_pasien(c *gin.Context) {
 		return
 	}
 	var poli []string
-	poli = append(poli, "gigi", "kulit", "tht", "umum")
+	poli = append(poli, "Gigi", "Kandungan", "THT", "Umum")
 	if (data.Poli == poli[0]) || (data.Poli == poli[1]) || (data.Poli == poli[2]) || (data.Poli == poli[3]) {
 		fmt.Println("poli benar")
 	} else {
 		c.JSON(400, gin.H{
 			"code":    400,
-			"message": "Poli yang tersedia: gigi, kulit, tht, dan umum.",
+			"message": "Poli yang tersedia: Gigi, Kandungan, THT, dan Umum.",
 		})
 		return
 	}
@@ -63,43 +62,22 @@ func Tambah_data_pasien(c *gin.Context) {
 		Nama:          data.Nama,
 		Alamat:        data.Alamat,
 		Jenis_kelamin: data.Jenis_kelamin,
-		No_hp:         data.Nomer_telfon,
+		No_hp:         data.No_hp,
 		Tempat_lahir:  data.Tempat_lahir,
 		Tanggal_lahir: data.Tanggal_lahir,
 	}
 	db.Create(&tambah)
 	db.Where("nik = ?", data.Nik).Find(&pasien)
+	var rekam model.Rekam_medis
+	db.Where("poli = ?", data.Poli).Find(&rekam)
+	nAntri := rekam.Nomor_antrian + 1
 	rekam_medis := model.Rekam_medis{
-		Id_pasien:        pasien.Id,
-		Tanggal:          time.Now(),
-		Poli:             data.Poli,
-		Jenis_penanganan: data.Jenis_penanganan,
+		Id_pasien:     pasien.Id,
+		Tanggal:       time.Now(),
+		Poli:          data.Poli,
+		Nomor_antrian: nAntri,
 	}
 	db.Create(&rekam_medis)
-	if data.Jenis_penanganan == "rawat jalan" {
-		var no int
-		for i := 0; i < len(poli); i++ {
-			if data.Poli == poli[i] {
-				var mRJalan model.Rawat_jalan
-				db.Where("poli = ?", poli[i]).Where("bool = ?", 0).Find(&mRJalan)
-				no = mRJalan.Nomer_antrian + 1
-				break
-			}
-		}
-		rawat_jalan := model.Rawat_jalan{
-			Id_pasien:     pasien.Id,
-			Tanggal:       time.Now(),
-			Poli:          data.Poli,
-			Nomer_antrian: no,
-		}
-		db.Create(&rawat_jalan)
-		c.JSON(200, gin.H{
-			"code":    200,
-			"data":    tambah,
-			"message": "Lengkapi data rekam medis dan rawat jalan.",
-		})
-		return
-	}
 	c.JSON(200, gin.H{
 		"code":    200,
 		"data":    tambah,

@@ -50,7 +50,7 @@ func main() {
 	admin.PUT("/data_pasien_edit/:id", controller.Edit_data_pasien)
 	admin.DELETE("/data_pasien_hapus/:id", controller.Hapus_data_pasien)
 
-	admin.GET("/rawat_jalan_lihat/:poli", controller.Rawat_jalan_lihat)
+	admin.GET("/rawat_jalan_lihat", controller.Rawat_jalan_lihat)
 	admin.PUT("/rawat_jalan_edit/:id", controller.Rawat_jalan_edit)
 
 	admin.GET("/data_dokter_lihat", controller.Data_dokter_lihat)
@@ -65,9 +65,11 @@ func main() {
 	dokter.PUT("/akun_dokter_update/:id", controller.Edit_akun_dokter_by_id)
 	dokter.GET("/akun_dokter_lihat", controller.Lihat_akun_dokter)
 
+	r.DELETE("/rekam/:id", controller.Rekam_hapus)
+
 	godotenv.Load()
 	port := os.Getenv("PORT")
-	var dns = fmt.Sprintf("0.0.0.0:%s", port)
+	var dns = fmt.Sprintf("127.0.0.1:%s", port)
 
 	r.Run(dns)
 }

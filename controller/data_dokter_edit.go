@@ -10,7 +10,7 @@ type eDokter struct {
 	Sip            string `json:"sip"`
 	Nama           string `json:"nama"`
 	Jenis_kelamin  string `json:"jenis_kelamin"`
-	Spesialis      string `json:"spesialis"`
+	Poli           string `json:"poli"`
 	Jadwal_praktek string `json:"jadwal_praktek"`
 	Nomor_str      string `json:"nomor_str"`
 	Nomor_telfon   string `json:"nomor_telfon"`
@@ -37,19 +37,19 @@ func Data_dokter_edit(c *gin.Context) {
 		})
 		return
 	}
-	if (eDokter.Spesialis == "umum") || (eDokter.Spesialis == "gigi") || (eDokter.Spesialis == "tht") || (eDokter.Spesialis == "kulit") {
+	if (eDokter.Poli == "Umum") || (eDokter.Poli == "Gigi") || (eDokter.Poli == "THT") || (eDokter.Poli == "Kandungan") {
 	} else {
 		c.JSON(400, gin.H{
 			"code":    400,
 			"data":    "-",
-			"message": "Spesialis dokter yang dibutuhkan: umum, gigi, kulit, tht.",
+			"message": "Spesialis dokter yang dibutuhkan: Umum, Gigi, Kandungan, THT.",
 		})
 		return
 	}
 	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("sip", eDokter.Sip)
 	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("nama_dokter", eDokter.Nama)
 	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("jenis_kelamin", eDokter.Jenis_kelamin)
-	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("spesialis", eDokter.Spesialis)
+	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("poli", eDokter.Poli)
 	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("jadwal_praktek", eDokter.Jadwal_praktek)
 	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("nomor_str", eDokter.Nomor_str)
 	db.Model(&dokter).Where("id_user = ?", c.Param("id")).Update("nomor_telfon", eDokter.Nomor_telfon)
