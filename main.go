@@ -66,6 +66,7 @@ func main() {
 	dokter.GET("/akun_dokter_lihat", controller.Lihat_akun_dokter)
 
 	r.DELETE("/rekam/:id", controller.Rekam_hapus)
+	r.DELETE("/rawat/:id", controller.Rawat_hapus)
 
 	godotenv.Load()
 	port := os.Getenv("PORT")

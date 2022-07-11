@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"heroku.com/model"
@@ -15,7 +13,6 @@ type pasien struct {
 	Jenis_kelamin string `json:"jenis_kelamin"`
 	Poli          string `json:"poli"`
 	Nama_dokter   string `json:"nama_dokter"`
-	Nomor_antrian string `json:"nomor_antrian"`
 	Alamat        string `json:"alamat"`
 	No_hp         string `json:"no_hp"`
 	Tempat_lahir  string `json:"tempat_lahir"`
@@ -30,21 +27,6 @@ func DataPasien(c *gin.Context) {
 	for i := 0; i < len(mPasien); i++ {
 		var rekam_medis model.Rekam_medis
 		db.Where("id_pasien = ?", mPasien[i].Id).Find(&rekam_medis)
-		var antri string
-		if rekam_medis.Poli == "Gigi" {
-			antri = "G-"
-		}
-		if rekam_medis.Poli == "Kandungan" {
-			antri = "K-"
-		}
-		if rekam_medis.Poli == "THT" {
-			antri = "T-"
-		}
-		if rekam_medis.Poli == "Umum" {
-			antri = "U-"
-		}
-		var str = strconv.Itoa(rekam_medis.Nomor_antrian)
-		nAntrian := antri + str
 		var dokter model.Dokter
 		db.Where("poli = ?", rekam_medis.Poli).Find(&dokter)
 		new := pasien{
@@ -54,7 +36,6 @@ func DataPasien(c *gin.Context) {
 			Jenis_kelamin: mPasien[i].Jenis_kelamin,
 			Poli:          rekam_medis.Poli,
 			Nama_dokter:   dokter.Nama_dokter,
-			Nomor_antrian: nAntrian,
 			Alamat:        mPasien[i].Alamat,
 			No_hp:         mPasien[i].No_hp,
 			Tempat_lahir:  mPasien[i].Tempat_lahir,
@@ -67,3 +48,19 @@ func DataPasien(c *gin.Context) {
 		"data": daftar_pasien,
 	})
 }
+
+// var antri string
+// if rekam_medis.Poli == "Gigi" {
+// 	antri = "G-"
+// }
+// if rekam_medis.Poli == "Kandungan" {
+// 	antri = "K-"
+// }
+// if rekam_medis.Poli == "THT" {
+// 	antri = "T-"
+// }
+// if rekam_medis.Poli == "Umum" {
+// 	antri = "U-"
+// }
+// var str = strconv.Itoa(rekam_medis.Nomor_antrian)
+// nAntrian := antri + str

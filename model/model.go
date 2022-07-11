@@ -41,7 +41,6 @@ type Rekam_medis struct {
 	Poli             string `json:"poli"`
 	Pemeriksaan      string `json:"pemeriksaan"`
 	Jenis_penanganan string `json:"jenis_penanganan"`
-	Nomor_antrian    int    `json:"nomor_antrian"`
 	Id_pasien        int    `json:"id_pasien"`
 }
 

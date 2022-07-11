@@ -10,14 +10,15 @@ import (
 )
 
 type tambah_data struct {
-	Nik           string `json:"nik"`
-	Nama          string `json:"nama"`
-	Jenis_kelamin string `json:"jenis_kelamin"`
-	Poli          string `json:"poli"`
-	Alamat        string `json:"alamat"`
-	No_hp         string `json:"no_hp"`
-	Tempat_lahir  string `json:"tempat_lahir"`
-	Tanggal_lahir string `json:"tanggal_lahir"`
+	Nik              string `json:"nik"`
+	Nama             string `json:"nama"`
+	Jenis_kelamin    string `json:"jenis_kelamin"`
+	Poli             string `json:"poli"`
+	Alamat           string `json:"alamat"`
+	No_hp            string `json:"no_hp"`
+	Tempat_lahir     string `json:"tempat_lahir"`
+	Tanggal_lahir    string `json:"tanggal_lahir"`
+	Jenis_penanganan string `json:"jenis_penanganan"`
 }
 
 func Tambah_data_pasien(c *gin.Context) {
@@ -57,6 +58,13 @@ func Tambah_data_pasien(c *gin.Context) {
 		})
 		return
 	}
+	if data.Jenis_penanganan != "Rawat jalan" {
+		c.JSON(400, gin.H{
+			"code":    400,
+			"message": "Jenis penanganan yang tersedia hanya rawat jalan",
+		})
+		return
+	}
 	tambah := model.Pasien{
 		Nik:           data.Nik,
 		Nama:          data.Nama,
@@ -68,16 +76,22 @@ func Tambah_data_pasien(c *gin.Context) {
 	}
 	db.Create(&tambah)
 	db.Where("nik = ?", data.Nik).Find(&pasien)
-	var rekam model.Rekam_medis
-	db.Where("poli = ?", data.Poli).Find(&rekam)
-	nAntri := rekam.Nomor_antrian + 1
 	rekam_medis := model.Rekam_medis{
+		Id_pasien:        pasien.Id,
+		Tanggal:          time.Now(),
+		Poli:             data.Poli,
+		Jenis_penanganan: data.Jenis_penanganan,
+	}
+	var raw_jalan model.Rawat_jalan
+	db.Where("poli = ?", data.Poli).Where("bool = ?", false).Find(&raw_jalan)
+	rawat := model.Rawat_jalan{
 		Id_pasien:     pasien.Id,
-		Tanggal:       time.Now(),
 		Poli:          data.Poli,
-		Nomor_antrian: nAntri,
+		Tanggal:       time.Now(),
+		Nomer_antrian: raw_jalan.Nomer_antrian + 1,
 	}
 	db.Create(&rekam_medis)
+	db.Create(&rawat)
 	c.JSON(200, gin.H{
 		"code":    200,
 		"data":    tambah,

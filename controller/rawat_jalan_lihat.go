@@ -32,9 +32,9 @@ func Rawat_jalan_lihat(c *gin.Context) {
 	var daftarRawatJalan []interface{}
 	for i := 0; i < len(rJalan); i++ {
 		var pasien model.Pasien
-		db.Where("id = ?", rJalan[i].Id).Find(&pasien)
+		db.Where("id = ?", rJalan[i].Id_pasien).Find(&pasien)
 		var rMedis model.Rekam_medis
-		db.Where("id_pasien = ?", rJalan[i].Id).Find(&rMedis)
+		db.Where("id_pasien = ?", rJalan[i].Id_pasien).Find(&rMedis)
 		var poli string
 		if rJalan[i].Poli == "Gigi" {
 			poli = "G-"
