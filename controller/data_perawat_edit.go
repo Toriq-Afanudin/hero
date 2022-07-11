@@ -10,7 +10,7 @@ type perawat struct {
 	Sip           string `json:"sip"`
 	Nama          string `json:"nama"`
 	Jenis_kelamin string `json:"jenis_kelamin"`
-	Bagian_kerja  string `json:"bagian_kerja"`
+	Poli          string `json:"poli"`
 	Jadwal_kerja  string `json:"jadwal_kerja"`
 	Jabatan       string `json:"jabatan"`
 	Nomor_telfon  string `json:"nomor_telfon"`
@@ -38,19 +38,19 @@ func Data_perawat_edit(c *gin.Context) {
 		})
 		return
 	}
-	if perawat.Bagian_kerja == "umum" {
+	if (perawat.Poli == "Umum") || (perawat.Poli == "Gigi") || (perawat.Poli == "Kandungan") || (perawat.Poli == "THT") {
 	} else {
 		c.JSON(400, gin.H{
 			"code":    400,
 			"data":    "-",
-			"message": "Bagian kerja yang dibutuhkan: umum, gigi, kulit, tht.",
+			"message": "Bagian kerja yang dibutuhkan: Umum, Gigi, Kandungan, THT.",
 		})
 		return
 	}
 	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("sip", perawat.Sip)
 	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("nama_perawat", perawat.Nama)
 	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("jenis_kelamin", perawat.Jenis_kelamin)
-	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("bagian_kerja", perawat.Bagian_kerja)
+	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("poli", perawat.Poli)
 	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("jadwal_kerja", perawat.Jadwal_kerja)
 	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("jabatan", perawat.Jabatan)
 	db.Model(&mPerawat).Where("id_user = ?", c.Param("id")).Update("nomor_telfon", perawat.Nomor_telfon)
