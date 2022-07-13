@@ -65,6 +65,9 @@ func main() {
 	dokter.PUT("/akun_dokter_update/:id", controller.Edit_akun_dokter_by_id)
 	dokter.GET("/akun_dokter_lihat", controller.Lihat_akun_dokter)
 
+	dokter.GET("/rawat_jalan/:id", controller.Rawat_jalan_lihat_per_poli)
+	dokter.PUT("/rawat_jalan_ubah_proses/:id_pasien", controller.Rawat_jalan_ubah_proses)
+
 	r.DELETE("/rekam/:id", controller.Rekam_hapus)
 	r.DELETE("/rawat/:id", controller.Rawat_hapus)
 
