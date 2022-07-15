@@ -94,7 +94,7 @@ func Tambah_data_pasien(c *gin.Context) {
 	db.Create(&rawat)
 	c.JSON(200, gin.H{
 		"code":    200,
-		"data":    tambah,
+		"data":    data,
 		"message": "Lengkapi data rekam medis.",
 	})
 }
