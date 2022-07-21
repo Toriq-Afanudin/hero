@@ -83,7 +83,7 @@ func Tambah_data_pasien(c *gin.Context) {
 		Jenis_penanganan: data.Jenis_penanganan,
 	}
 	var raw_jalan model.Rawat_jalan
-	db.Where("poli = ?", data.Poli).Where("bool = ?", false).Find(&raw_jalan)
+	db.Where("poli = ?", data.Poli).Find(&raw_jalan)
 	rawat := model.Rawat_jalan{
 		Id_pasien:     pasien.Id,
 		Poli:          data.Poli,
