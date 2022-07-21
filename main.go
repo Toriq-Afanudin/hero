@@ -41,9 +41,9 @@ func main() {
 	r.POST("/login", controller.Login)
 
 	admin := r.Group("/admin")
-	admin.POST("/akun_tambah", controller.Akun_tambah)
-	admin.GET("/akun_tampil", controller.Akun_tampil)
-	admin.DELETE("/akun_hapus/:id", controller.Akun_hapus)
+	admin.POST("/akun_tambah", controller.PostDataUser)
+	admin.GET("/akun_tampil", controller.GetDataUser)
+	admin.DELETE("/akun_hapus/:id", controller.DeleteDataUser)
 
 	admin.POST("/data_pasien_tambah", controller.Tambah_data_pasien)
 	admin.GET("/data_pasien", controller.DataPasien)

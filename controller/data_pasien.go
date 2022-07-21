@@ -35,7 +35,7 @@ func DataPasien(c *gin.Context) {
 			Nama:          mPasien[i].Nama,
 			Jenis_kelamin: mPasien[i].Jenis_kelamin,
 			Poli:          rekam_medis.Poli,
-			Nama_dokter:   dokter.Nama_dokter,
+			// Nama_dokter:   dokter.Nama_dokter,
 			Alamat:        mPasien[i].Alamat,
 			No_hp:         mPasien[i].No_hp,
 			Tempat_lahir:  mPasien[i].Tempat_lahir,
