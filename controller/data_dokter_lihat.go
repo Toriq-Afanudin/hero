@@ -7,14 +7,14 @@ import (
 )
 
 type dok struct {
-	Id             int
-	Nama           string
-	Sip            string
-	Jenis_kelamin  string
-	Jadwal_praktek string
-	Poli           string
-	Nomor_telfon   string
-	Nomor_str      string
+	Id             int    `json:"id"`
+	Nama           string `json:"nama"`
+	Sip            string `json:"sip"`
+	Jenis_kelamin  string `json:"jenis_kelamin"`
+	Jadwal_praktek string `json:"jadwal_praktek"`
+	Poli           string `json:"poli"`
+	Nomor_telfon   string `json:"nomor_telfon"`
+	Nomor_str      string `json:"nomor_str"`
 }
 
 func Data_dokter_lihat(c *gin.Context) {

@@ -7,15 +7,15 @@ import (
 )
 
 type per struct {
-	Id            int
-	Nama          string
-	Sip           string
-	Jenis_kelamin string
-	Poli          string
-	Jadwal_kerja  string
-	Jabatan       string
-	Nomor_telfon  string
-	Nomor_str     string
+	Id            int    `json:"id"`
+	Nama          string `json:"nama"`
+	Sip           string `json:"sip"`
+	Jenis_kelamin string `json:"jenis_kelamin"`
+	Poli          string `json:"poli"`
+	Jadwal_kerja  string `json:"jadwal_kerja"`
+	Jabatan       string `json:"jabatan"`
+	Nomor_telfon  string `json:"nomor_telfon"`
+	Nomor_str     string `json:"nomor_str"`
 }
 
 func Data_perawat_lihat(c *gin.Context) {
