@@ -22,7 +22,7 @@ type pasien struct {
 func DataPasien(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var mPasien []model.Pasien
-	db.Find(&mPasien)
+	db.Raw("select * from pasiens order by id desc").Scan(&mPasien)
 	var daftar_pasien []interface{}
 	for i := 0; i < len(mPasien); i++ {
 		var rekam_medis model.Rekam_medis

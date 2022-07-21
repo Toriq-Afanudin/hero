@@ -19,7 +19,7 @@ type user struct {
 func Akun_tampil(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var akun []user
-	db.Raw("select * from users").Scan(&akun)
+	db.Raw("select * from users order by id desc").Scan(&akun)
 	for i := 0; i < len(akun); i++ {
 		if akun[i].Level == "perawat" {
 			var perawat model.Perawat
