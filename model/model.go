@@ -13,16 +13,6 @@ type Pasien struct {
 	Tanggal_lahir string `json:"tanggal_lahir"`
 }
 
-type Jadwal struct {
-	Id             int    `json:"id"`
-	Agenda         string `json:"agenda"`
-	Nik            string `json:"nik"`
-	User_type      string `json:"user_type"`
-	Id_ruangan     int    `json:"id_ruangan"`
-	Tanggal_masuk  string `json:"tanggal_masuk"`
-	Tanggal_keluar string `json:"tanggal_keluar"`
-}
-
 type Dokter struct {
 	Id_user        int    `json:"id_user"`
 	Sip            string `json:"sip"`
@@ -42,22 +32,6 @@ type Rekam_medis struct {
 	Pemeriksaan      string `json:"pemeriksaan"`
 	Jenis_penanganan string `json:"jenis_penanganan"`
 	Id_pasien        int    `json:"id_pasien"`
-}
-
-type Obat struct {
-	Kode_obat      int    `json:"kode_obat"`
-	Nama_obat      string `json:"nama_obat"`
-	Jenis_obat     string `json:"jenis_obat"`
-	Tahun_produksi string `json:"tahun_produksi"`
-	Masa_berlaku   string `json:"masa_berlaku"`
-	Total_obat     int    `json:"total_obat"`
-}
-
-type Ruangan struct {
-	Id            int    `json:"id"`
-	Nama_ruangan  string `json:"nama_ruangan"`
-	Jenis_ruangan string `json:"jenis_ruangan"`
-	Kapasitas     string `json:"kapasitas"`
 }
 
 type Perawat struct {
